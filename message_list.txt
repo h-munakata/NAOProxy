@@ -1,0 +1,10 @@
+{"playmotion":"track"}
+{"playmotion":"greeting"}
+{"playmotion":"greeting-light"}
+{"playmotion":"greeting-deep"}
+{"playmotion":"nod"}
+{"playmotion":"nod-light"}
+{"playmotion":"nod-deep"}
+{"playmotion":"wavehand"}
+{"playmotion":"shakehead"}
+{"exit":"exit"}

@@ -55,6 +55,8 @@ class NAOProxy:
         action_type, key  = message.items()[0]
         if action_type=="playmotion":
             self.motion.play(key)
+        elif action_type=="exit":
+            self.motion.exit()
 
 
 
@@ -80,7 +82,9 @@ class NAO_Motion:
 
 
     def play(self, key_motion):
-        # self.frame.playBehavior(self.dict_motion[key_motion])
+        self.frame.playBehavior(self.dict_motion[key_motion])
+
+    def exit(self):
         self.frame.cleanBehaviors()
 
 
