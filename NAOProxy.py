@@ -3,6 +3,7 @@ from naoqi import ALProxy
 import socket 
 import utils
 import json
+import sys
 
 
 class NAOProxy:
@@ -11,7 +12,6 @@ class NAOProxy:
         self.ip_NAO = ip_NAO
         self.port_NAO = port_NAO
         self.init_server(ip_server, port_server)
-
         self.motion = NAO_Motion(ip_NAO, port_NAO, path_json_behavior)
 
     def init_server(self, ip_server, port_server):
@@ -28,20 +28,27 @@ class NAOProxy:
         if len(json_message)==0:
             print "connection is lost"
             return False
-        self.send("proxy recieved message correctly")
         return json_message
 
 
     def process_message(self):
-        while(1):
-            print 'waiting message'
-            json_message = self.wait_message()
-            if not json_message:
-                break
-            else:
-                message = json.loads(json_message)
-                self.action(message)
-                print 'recieved message:{}'.format(message)
+        try:
+            while(1):
+                print 'waiting message'
+                json_message = self.wait_message()
+                if not json_message:
+                    print 'disconnect with client'
+                    self.disconnect()
+                    break
+                else:
+                    message = json.loads(json_message)
+                    self.action(message)
+                    print 'recieved message:{}'.format(message)
+                    self.send('{"result":"success-end"}')
+
+        except:
+            print 'some errors occured'
+            self.disconnect()
 
 
     def send(self,message):
@@ -55,8 +62,11 @@ class NAOProxy:
         action_type, key  = message.items()[0]
         if action_type=="playmotion":
             self.motion.play(key)
-        elif action_type=="exit":
-            self.motion.exit()
+
+    def disconnect(self):
+        print "disconected"
+        self.sock.close()
+        self.motion.exit()
 
 
 
@@ -76,9 +86,8 @@ class NAO_Motion:
         self.dict_motion = {}
         
         for key_motion, path_xarfile in playmotion.items():
-            print(path_xarfile.encode("UTF-8"))
+            print "loading behavior file:{}".format(path_xarfile.encode("UTF-8"))
             self.dict_motion[key_motion] = self.frame.newBehaviorFromFile(path_xarfile.encode("UTF-8"), "")
-            print(self.dict_motion[key_motion])
 
 
     def play(self, key_motion):
@@ -88,13 +97,17 @@ class NAO_Motion:
         self.frame.cleanBehaviors()
 
 
-ip_NAO = "100.86.6.155"
-port_NAO=9559
-ip_server = "100.86.6.60"
-port_server = 8009
-path_json_behavior = "/home/munakata/NAO/NAOProxy/behavior.json"
+if __name__ == "__main__":
+    ip_NAO = sys.argv[1]
+    port_NAO = int(sys.argv[2])
+    ip_server = sys.argv[3]
+    port_server = int(sys.argv[4])
+    path_json_behavior = "./behavior.json"
 
-nao_proxy = NAOProxy(ip_NAO=ip_NAO, port_NAO=port_NAO, 
-                        ip_server=ip_server, port_server=port_server,
-                        path_json_behavior=path_json_behavior)
-nao_proxy.process_message()
+    nao_proxy = NAOProxy(ip_NAO=ip_NAO, port_NAO=port_NAO, 
+                            ip_server=ip_server, port_server=port_server,
+                            path_json_behavior=path_json_behavior)
+    try:
+        nao_proxy.process_message()
+    except:
+        nao_proxy.disconnect()
