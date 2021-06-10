@@ -7,4 +7,5 @@
 {"playmotion":"nod-deep"}
 {"playmotion":"wavehand"}
 {"playmotion":"shakehead"}
-{"exit":"exit"}
+{"command":"exit"}
+{"":""}

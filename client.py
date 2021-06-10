@@ -24,7 +24,11 @@ try:
         # recieve message from proxy
         recieved_message = client_socket.recv(1024)
 
-        print 'recieved_message :{}'.format(recieved_message)
+        if len(recieved_message)==0:
+            print "server is closed"
+            break
+        else:
+            print 'recieved_message :{}'.format(recieved_message)
 
 except KeyboardInterrupt:
     client_socket.close()
