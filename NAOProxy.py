@@ -5,7 +5,6 @@ import utils
 import json
 import sys
 
-
 class NAOProxy:
     def __init__(self, path_json_behavior, ip_server, port_server, ip_NAO, port_NAO, send_message=True):
         self.send_message = send_message
@@ -17,8 +16,8 @@ class NAOProxy:
 
     def init_NAO(self, ip_NAO, port_NAO):
         try:
-            self.motion = NAO_Motion(ip_NAO, port_NAO, self.path_json_behavior)
             self.say = NAO_Say(ip_NAO, port_NAO)
+            self.motion = NAO_Motion(ip_NAO, port_NAO, self.path_json_behavior)
         except:
             print "NAO has some error"
             exit()
@@ -118,20 +117,14 @@ class NAO_Motion:
         # Refer to ALFrameManager.py
         self.frame = ALProxy("ALFrameManager", ip_NAO, port_NAO)
 
-        self.dict_motion = {}
-        
-        # for key_motion, path_xarfile in playmotion.items():
-        #     print "loading behavior file:{}".format(path_xarfile.encode("UTF-8"))
-        #     self.dict_motion[key_motion] = self.frame.newBehaviorFromFile(path_xarfile.encode("UTF-8"), "")
-
 
     def play(self, key_motion):
         if key_motion in self.playmotion.keys():
             print "playing..."
             path_xar = self.playmotion[key_motion]
             id = self.frame.newBehaviorFromFile(path_xar.encode("UTF-8"), "")
-            print id
-            self.frame.playBehavior(id)
+            self.frame.completeBehavior(id)
+
             return "success"
         else:
             return "this motion can't be handled"

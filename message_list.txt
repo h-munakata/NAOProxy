@@ -8,4 +8,3 @@
 {"playmotion":"wavehand"}
 {"playmotion":"shakehead"}
 {"command":"exit"}
-{"":""}

@@ -3,6 +3,8 @@
         "track": "/home/nao/behavior_munakata/track_face_and_sound/behavior.xar",
         "nod": "/home/nao/behavior_munakata/nod/behavior.xar",
         "nod-light": "/home/nao/behavior_munakata/nod-light/behavior.xar",
-        "nod-deep": "/home/nao/behavior_munakata/nod-deep/behavior.xar"
+        "nod-deep": "/home/nao/behavior_munakata/nod-deep/behavior.xar",
+        "wavehand": "/home/nao/behavior_munakata/wavehand/behavior.xar",
+        "shakehead": "/home/nao/behavior_munakata/shakehead/behavior.xar"
     }
 }
