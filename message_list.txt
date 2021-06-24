@@ -8,3 +8,4 @@
 {"playmotion":"wavehand"}
 {"playmotion":"shakehead"}
 {"command":"exit"}
+{"say":"やあ"}

@@ -15,12 +15,22 @@ class NAOProxy:
 
 
     def init_NAO(self, ip_NAO, port_NAO):
-        try:
-            self.say = NAO_Say(ip_NAO, port_NAO)
-            self.motion = NAO_Motion(ip_NAO, port_NAO, self.path_json_behavior)
-        except:
-            print "NAO has some error"
-            exit()
+        connection_success = False
+        for i in range(5):
+            try:
+                self.say = NAO_Say(ip_NAO, port_NAO)
+                self.motion = NAO_Motion(ip_NAO, port_NAO, self.path_json_behavior)
+                connection_success = True
+                break
+            except:
+                print "[!] Some type of error has occured. Retrying to connect"
+                continue
+        
+        if connection_success:
+            print "Success to connect to NAO"
+        else:
+            print "[!] Can't connect to NAO. exit this program"
+        
 
 
     def init_server(self, ip_server, port_server):
@@ -30,7 +40,7 @@ class NAOProxy:
         self.sock.settimeout(100)
         try:
             self.client, self.address_server = self.sock.accept()
-            print('success to connect to client, IP:{}, port:{}'.format(self.address_server[0], self.address_server[1]))
+            print('success to connect to client. IP:{}, port:{}'.format(self.address_server[0], self.address_server[1]))
         except:
             self.disconnect()
 
@@ -123,7 +133,7 @@ class NAO_Motion:
             print "playing..."
             path_xar = self.playmotion[key_motion]
             id = self.frame.newBehaviorFromFile(path_xar.encode("UTF-8"), "")
-            self.frame.completeBehavior(id)
+            self.frame.playBehavior(id)
 
             return "success"
         else:
