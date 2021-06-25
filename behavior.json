@@ -2,6 +2,7 @@
     "playmotion": {
         "track": "/home/nao/behavior_munakata/track_face_and_sound/behavior.xar",
         "greeting": "/home/nao/behavior_munakata/greeting/behavior.xar",
+        "greeting-deep": "/home/nao/behavior_munakata/greeting-deep/behavior.xar",
         "greeting-light": "/home/nao/behavior_munakata/greeting-light/behavior.xar",
         "nod": "/home/nao/behavior_munakata/nod/behavior.xar",
         "nod-light": "/home/nao/behavior_munakata/nod-light/behavior.xar",
