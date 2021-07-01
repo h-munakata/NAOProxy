@@ -1,13 +1,14 @@
 {
     "playmotion": {
-        "track": "/home/nao/behavior_munakata/track_face_and_sound/behavior.xar",
-        "greeting": "/home/nao/behavior_munakata/greeting/behavior.xar",
-        "greeting-deep": "/home/nao/behavior_munakata/greeting-deep/behavior.xar",
-        "greeting-light": "/home/nao/behavior_munakata/greeting-light/behavior.xar",
-        "nod": "/home/nao/behavior_munakata/nod/behavior.xar",
-        "nod-light": "/home/nao/behavior_munakata/nod-light/behavior.xar",
-        "nod-deep": "/home/nao/behavior_munakata/nod-deep/behavior.xar",
-        "wavehand": "/home/nao/behavior_munakata/wavehand/behavior.xar",
-        "shakehead": "/home/nao/behavior_munakata/shakehead/behavior.xar"
+        "track": "/home/nao/behavior/track_face_and_sound/behavior.xar",
+        "greeting": "/home/nao/behavior/greeting/behavior.xar",
+        "greeting-deep": "/home/nao/behavior/greeting-deep/behavior.xar",
+        "greeting-light": "/home/nao/behavior/greeting-light/behavior.xar",
+        "nod": "/home/nao/behavior/nod/behavior.xar",
+        "nod-light": "/home/nao/behavior/nod-light/behavior.xar",
+        "nod-deep": "/home/nao/behavior/nod-deep/behavior.xar",
+        "wavehand": "/home/nao/behavior/wavehand/behavior.xar",
+        "shakehead": "/home/nao/behavior/shakehead/behavior.xar",
+        "sitdown": "/home/nao/behavior/sitdown/behavior.xar"
     }
 }

@@ -16,7 +16,8 @@ class NAOProxy:
 
     def init_NAO(self, ip_NAO, port_NAO):
         connection_success = False
-        for i in range(5):
+        num_retry = 5
+        for i in range(num_retry):
             try:
                 self.say = NAO_Say(ip_NAO, port_NAO)
                 self.motion = NAO_Motion(ip_NAO, port_NAO, self.path_json_behavior)
@@ -29,7 +30,7 @@ class NAOProxy:
         if connection_success:
             print "Success to connect to NAO"
         else:
-            print "[!] Can't connect to NAO. exit this program"
+            raise RuntimeError("Can't connect to NAO. exit this program")
         
 
 
@@ -67,27 +68,21 @@ class NAOProxy:
                 pass
             else:
                 print 'recieved message:{}'.format(message)
-                action_type, key  = message.items()[0]
+                message_type, value  = message.items()[0]
 
-                if action_type=='command':
-                    self.send('{"result":"success-end"}')
-                    self.disconnect()
-                    break
+                result_value = "something is wrong"
+                try:
+                    if message_type=='playmotion':
+                        result_value = self.motion.play(value)
 
-                elif action_type=='playmotion':
-                    result = self.motion.play(key)
-                    if result == 'success':
-                        self.send('{"result":"success-end"}')
-                    else:
-                        print result
-                        self.send('{"result":"failure-end"}')
+                    elif message_type=='say':
+                        result_value = self.say.say(value)
 
-                elif action_type=='say':
-                    self.say.say(key)
-                    self.send('{"result":"success-end"}')
+                    self.send('{"result":"xxx"}'.replace("xxx",result_value))
 
-                else:
-                    self.send('{"result":"the type of the message can\'t handle}')
+                except:
+                    self.send('{"result":"xxx"}'.replace("xxx",result_value))
+                
 
 
     def send(self,message):
@@ -97,15 +92,6 @@ class NAOProxy:
             pass
 
 
-    def disconnect(self):
-        self.client.close()
-        self.sock.close()
-        print "server is closed"
-        if self.motion:
-            self.motion.exit()
-        exit()
-
-
 
 class NAO_Say:
     def __init__(self, ip_NAO, port_NAO):
@@ -113,6 +99,7 @@ class NAO_Say:
 
     def say(self, message):
         self.audioProxy.post.say(message.encode("UTF-8"))
+        return "succeed-end"
 
 
 class NAO_Motion:
@@ -135,9 +122,9 @@ class NAO_Motion:
             id = self.frame.newBehaviorFromFile(path_xar.encode("UTF-8"), "")
             self.frame.playBehavior(id)
 
-            return "success"
+            return "succeed-end"
         else:
-            return "this motion can't be handled"
+            return "can't handle the message"
 
     def exit(self):
         self.frame.cleanBehaviors()
