@@ -26,19 +26,19 @@
                             <Input name="onStart" type="1" type_size="1" nature="2" inner="0" tooltip="Box behavior starts when a signal is received on this input." id="2" />
                             <Input name="onStop" type="1" type_size="1" nature="3" inner="0" tooltip="Box behavior stops when a signal is received on this input." id="3" />
                             <Output name="onStopped" type="1" type_size="1" nature="1" inner="0" tooltip="ボックス動作の終了時に信号を送る。" id="4" />
-                            <Timeline enable="1" fps="25" start_frame="1" end_frame="-1" size="26">
+                            <Timeline enable="1" fps="25" start_frame="1" end_frame="-1" size="31">
                                 <ActuatorList model="nao">
                                     <ActuatorCurve name="value" actuator="HeadPitch" recordable="0" mute="0" unit="0">
                                         <Key frame="8" value="-7.64898" />
-                                        <Key frame="14" value="-7.64898" />
-                                        <Key frame="20" value="-7.64898" />
-                                        <Key frame="26" value="-7.64898" />
+                                        <Key frame="16" value="-7.64898" />
+                                        <Key frame="24" value="-7.64898" />
+                                        <Key frame="31" value="-7.64898" />
                                     </ActuatorCurve>
                                     <ActuatorCurve name="value" actuator="HeadYaw" recordable="0" mute="0" unit="0">
                                         <Key frame="8" value="-0.00240423" />
-                                        <Key frame="14" value="28.2108" />
-                                        <Key frame="20" value="-27.6883" />
-                                        <Key frame="26" value="-0.00240423" />
+                                        <Key frame="16" value="28.2108" />
+                                        <Key frame="24" value="-27.6883" />
+                                        <Key frame="31" value="-0.00240423" />
                                     </ActuatorCurve>
                                 </ActuatorList>
                             </Timeline>

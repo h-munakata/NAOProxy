@@ -7,5 +7,6 @@
 {"playmotion":"nod-deep"}
 {"playmotion":"wavehand"}
 {"playmotion":"shakehead"}
-{"playmotion":"sitdown"}
+{"playmotion":"sit-down"}
+{"playmotion":"stand-up"}
 {"say":"やあ"}

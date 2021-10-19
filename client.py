@@ -2,15 +2,18 @@
 from naoqi import ALProxy
 import socket 
 import json
-import sys
 import time
+import argparse
 
 
+parser = argparse.ArgumentParser(description='Client for NAO Proxy') 
 
-server_ip = sys.argv[1]
-server_port = int(sys.argv[2])
+parser.add_argument('ip_server', type=str)
+parser.add_argument('port_server', type=int)
+args = parser.parse_args()
+
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-client_socket.connect((server_ip, server_port))
+client_socket.connect((args.ip_server, args.port_server))
 
 try:
     while 1:

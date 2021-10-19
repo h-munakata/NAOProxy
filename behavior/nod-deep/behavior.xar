@@ -15,7 +15,7 @@
             <BehaviorLayer name="behavior_layer1">
                 <BehaviorKeyframe name="keyframe1" index="1">
                     <Diagram>
-                        <Box name="nod-deep" id="3" localization="8" tooltip="" x="372" y="228">
+                        <Box name="nod-deep" id="3" localization="8" tooltip="" x="367" y="228">
                             <bitmap>media/images/box/box-timeLine.png</bitmap>
                             <script language="4">
                                 <content>
@@ -31,12 +31,12 @@
                                     <ActuatorCurve name="value" actuator="HeadPitch" recordable="0" mute="0" unit="0">
                                         <Key frame="12" value="-0.793436" />
                                         <Key frame="28" value="23.6405" />
-                                        <Key frame="41" value="-1.05711" />
+                                        <Key frame="41" value="-6.41851" />
                                     </ActuatorCurve>
                                     <ActuatorCurve name="value" actuator="HeadYaw" recordable="0" mute="0" unit="0">
                                         <Key frame="12" value="0" />
                                         <Key frame="28" value="0" />
-                                        <Key frame="41" value="0" />
+                                        <Key frame="41" value="-1.145" />
                                     </ActuatorCurve>
                                 </ActuatorList>
                             </Timeline>

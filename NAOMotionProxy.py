@@ -1,17 +1,16 @@
 # -*- coding: utf-8 -*-
 from naoqi import ALProxy
 import socket 
-import utils
 import json
-import sys
+import argparse
 
-class NAOProxy:
-    def __init__(self, path_json_behavior, ip_server, port_server, ip_NAO, port_NAO, send_message=True):
+class NAOMotionProxy:
+    def __init__(self, path_json_behavior, ip_client, port_client, ip_NAO, port_NAO, send_message=True):
         self.send_message = send_message
         self.path_json_behavior = path_json_behavior
         self.init_NAO(ip_NAO, port_NAO)
         print "waiting client"
-        self.init_server(ip_server, port_server)
+        self.connect_client(ip_client, port_client)
 
 
     def init_NAO(self, ip_NAO, port_NAO):
@@ -19,8 +18,7 @@ class NAOProxy:
         num_retry = 5
         for i in range(num_retry):
             try:
-                self.say = NAO_Say(ip_NAO, port_NAO)
-                self.motion = NAO_Motion(ip_NAO, port_NAO, self.path_json_behavior)
+                self.motion = NAOMotion(ip_NAO, port_NAO, self.path_json_behavior)
                 connection_success = True
                 break
             except:
@@ -34,14 +32,14 @@ class NAOProxy:
         
 
 
-    def init_server(self, ip_server, port_server):
+    def connect_client(self, ip_client, port_client):
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.sock.bind((ip_server, port_server))
+        self.sock.bind((ip_client, port_client))
         self.sock.listen(1)
         self.sock.settimeout(100)
         try:
-            self.client, self.address_server = self.sock.accept()
-            print('success to connect to client. IP:{}, port:{}'.format(self.address_server[0], self.address_server[1]))
+            self.client, self.address_client = self.sock.accept()
+            print('success to connect to client. IP:{}, port:{}'.format(self.address_client[0], self.address_client[1]))
         except:
             self.disconnect()
 
@@ -50,13 +48,13 @@ class NAOProxy:
         try:
             json_message = self.client.recv(buffer_size)
         except:
-            print "vital error has occured"
+            print "A vital error has occured."
             self.disconnect()
         try:
             message = json.loads(json_message)
             return message
         except:
-            self.send('{"result":"message has some wrong"}')
+            self.send('{"result":"something is wrong"}')
             return None
 
 
@@ -70,18 +68,11 @@ class NAOProxy:
                 print 'recieved message:{}'.format(message)
                 message_type, value  = message.items()[0]
 
-                result_value = "something is wrong"
                 try:
-                    if message_type=='playmotion':
-                        result_value = self.motion.play(value)
-
-                    elif message_type=='say':
-                        result_value = self.say.say(value)
-
-                    self.send('{"result":"xxx"}'.replace("xxx",result_value))
-
+                    self.motion.play(value)
+                    self.send('{"result":"succeed-end"}')
                 except:
-                    self.send('{"result":"xxx"}'.replace("xxx",result_value))
+                    self.send('{"result":"something is wrong"}')
                 
 
 
@@ -92,17 +83,7 @@ class NAOProxy:
             pass
 
 
-
-class NAO_Say:
-    def __init__(self, ip_NAO, port_NAO):
-        self.audioProxy = ALProxy("ALTextToSpeech", ip_NAO, port_NAO)
-
-    def say(self, message):
-        self.audioProxy.post.say(message.encode("UTF-8"))
-        return "succeed-end"
-
-
-class NAO_Motion:
+class NAOMotion:
     def __init__(self, ip_NAO, port_NAO, path_json_behavior):
         json_behavior = open(path_json_behavior,'r')
         behavior = json.load(json_behavior)
@@ -119,28 +100,32 @@ class NAO_Motion:
         if key_motion in self.playmotion.keys():
             print "playing..."
             path_xar = self.playmotion[key_motion]
+            print path_xar
             id = self.frame.newBehaviorFromFile(path_xar.encode("UTF-8"), "")
             self.frame.playBehavior(id)
 
-            return "succeed-end"
         else:
-            return "can't handle the message"
+            print "Can't handle the message. Check behavior.json or .xar files"
+            raise ValueError("Can't handle the message")
 
     def exit(self):
         self.frame.cleanBehaviors()
 
 
 if __name__ == "__main__":
-    ip_NAO = sys.argv[1]
-    port_NAO = int(sys.argv[2])
-    ip_server = sys.argv[3]
-    port_server = int(sys.argv[4])
-    send_message = bool(sys.argv[5])
+    parser = argparse.ArgumentParser(description='Motion Proxy for NAO') 
+
+    parser.add_argument('ip_NAO', type=str)
+    parser.add_argument('port_NAO', type=int)
+    parser.add_argument('ip_client', type=str)
+    parser.add_argument('port_client', type=int)
+    parser.add_argument('-m', action='store_true', help="Send messages of the result to client")
+    args = parser.parse_args()
     path_json_behavior = "./behavior.json"
 
-    nao_proxy = NAOProxy(path_json_behavior, 
-                        ip_server, port_server,
-                        ip_NAO, port_NAO,
-                        send_message=True)
+    nao_proxy = NAOMotionProxy(path_json_behavior, 
+                        args.ip_client, args.port_client,
+                        args.ip_NAO, args.port_NAO,
+                        send_message=args.m)
     
     nao_proxy.process_message()
